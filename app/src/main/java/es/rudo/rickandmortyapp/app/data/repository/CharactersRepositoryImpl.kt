@@ -9,8 +9,9 @@ import es.rudo.rickandmortyapp.app.domain.repository.CharactersRepository
 import es.rudo.rickandmortyapp.app.helpers.Utils.getError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class CharactersRepositoryImpl constructor(
+class CharactersRepositoryImpl @Inject constructor(
     private val remoteCharactersDataSource: RemoteCharactersDataSource,
     private val localCharactersDataSource: LocalCharactersDataSource
 ) : CharactersRepository {
