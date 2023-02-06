@@ -15,7 +15,7 @@ class CharactersRepositoryImpl constructor(
     private val localCharactersDataSource: LocalCharactersDataSource
 ) : CharactersRepository {
 
-    override suspend fun getCharacters(page: Int): Flow<Result<CharacterResult?>> {
+    override suspend fun getCharacters(): Flow<Result<CharacterResult?>> {
         return flow {
             try {
                 val result = remoteCharactersDataSource.getCharacters()
