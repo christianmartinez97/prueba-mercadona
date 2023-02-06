@@ -31,16 +31,8 @@ class MainViewModel @Inject constructor(
         MutableStateFlow(MainUiState())
     }
 
-//    init {
-//        observeCharacters()
-//    }
-
     init {
-        viewModelScope.launch {
-            observeCharactersUseCase().collect { result ->
-                setCharactersList(result)
-            }
-        }
+        observeCharacters()
     }
 
     private fun observeCharacters() {

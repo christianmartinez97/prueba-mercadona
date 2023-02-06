@@ -12,17 +12,13 @@ class RemoteCharactersDataSourceImpl @Inject constructor(
 ) : RemoteCharactersDataSource {
 
     override suspend fun getCharacters(): CharacterResult {
-        return charactersApi.getCharacters().body()?.let {
-            it
-        } ?: kotlin.run {
+        return charactersApi.getCharacters().body() ?: kotlin.run {
             throw Error.EmptyBody("Empty body")
         }
     }
 
     override suspend fun getCharacterInfo(characterId: Int): Character {
-        return charactersApi.getCharacterInfo(characterId).body()?.let {
-            it
-        } ?: kotlin.run {
+        return charactersApi.getCharacterInfo(characterId).body() ?: kotlin.run {
             throw Error.EmptyBody("Empty body")
         }
     }
