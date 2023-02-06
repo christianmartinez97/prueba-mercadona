@@ -10,5 +10,6 @@ sealed class Error(val description: String? = null) : Exception() {
     class InternalError(description: String?) : Error(description)
     class AccessDenied(description: String?) : Error(description)
     class ServiceUnavailable(description: String?) : Error(description)
+    class EmptyBody(description: String?) : Error(description)
     class Unknown(description: String?) : Error(description)
 }

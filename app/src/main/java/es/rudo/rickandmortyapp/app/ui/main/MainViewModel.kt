@@ -6,8 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import es.rudo.rickandmortyapp.app.data.models.Character
 import es.rudo.rickandmortyapp.app.data.models.Empty
 import es.rudo.rickandmortyapp.app.data.models.Error
-import es.rudo.rickandmortyapp.app.data.models.Success
-import es.rudo.rickandmortyapp.app.domain.usecases.GetCharactersUseCase
 import es.rudo.rickandmortyapp.app.domain.usecases.ObserveCharactersUseCase
 import es.rudo.rickandmortyapp.app.domain.usecases.RefreshCharactersUseCase
 import kotlinx.coroutines.Dispatchers
@@ -20,13 +18,11 @@ import javax.inject.Inject
 
 data class MainUiState(
     val error: Error = Empty,
-    var charactersList: List<Character> = mutableListOf(),
-    val success: Success = Success(false)
+    var charactersList: List<Character> = mutableListOf()
 )
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getCharactersUseCase: GetCharactersUseCase,
     private val observeCharactersUseCase: ObserveCharactersUseCase,
     private val refreshCharactersUseCase: RefreshCharactersUseCase
 ) : ViewModel() {
@@ -35,22 +31,19 @@ class MainViewModel @Inject constructor(
         MutableStateFlow(MainUiState())
     }
 
-    fun getAllCharacters() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getCharactersUseCase().collect { result ->
-                result.onSuccess { characterResult ->
-                    characterResult?.results?.let { characters ->
-                        setCharactersList(characters)
-                    }
-                }
-                result.onFailure {
-                    setError(it as Error)
-                }
+//    init {
+//        observeCharacters()
+//    }
+
+    init {
+        viewModelScope.launch {
+            observeCharactersUseCase().collect { result ->
+                setCharactersList(result)
             }
         }
     }
 
-    fun observeCharacters() {
+    private fun observeCharacters() {
         viewModelScope.launch(Dispatchers.IO) {
             observeCharactersUseCase().collect { result ->
                 setCharactersList(result)
@@ -60,13 +53,10 @@ class MainViewModel @Inject constructor(
 
     fun refreshCharacters() {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = refreshCharactersUseCase()
-            result.onSuccess {
-                setSuccess(it)
-            }
-            result.onFailure {
-                setError(it as Error)
-            }
+            refreshCharactersUseCase()
+                .onFailure {
+                    setErrorState(it as Error)
+                }
         }
     }
 
@@ -76,13 +66,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun setSuccess(success: Success) {
-        mainUiState.update {
-            it.copy(success = success)
-        }
-    }
-
-    private fun setError(error: Error) {
+    private fun setErrorState(error: Error) {
         mainUiState.update {
             it.copy(error = error)
         }

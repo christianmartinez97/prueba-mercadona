@@ -3,7 +3,6 @@ package es.rudo.rickandmortyapp.app.data.repository
 import es.rudo.rickandmortyapp.app.data.models.Character
 import es.rudo.rickandmortyapp.app.data.models.CharacterResult
 import es.rudo.rickandmortyapp.app.data.models.Error
-import es.rudo.rickandmortyapp.app.data.models.Success
 import es.rudo.rickandmortyapp.app.data.source.RemoteCharactersDataSource
 import es.rudo.rickandmortyapp.app.data.source.local.LocalCharactersDataSource
 import es.rudo.rickandmortyapp.app.domain.repository.CharactersRepository
@@ -17,11 +16,11 @@ class CharactersRepositoryImpl @Inject constructor(
     private val localCharactersDataSource: LocalCharactersDataSource
 ) : CharactersRepository {
 
-    override suspend fun getCharacters(): Flow<Result<CharacterResult?>> {
+    override suspend fun getCharacters(): Flow<Result<CharacterResult>> {
         return flow {
             try {
                 val result = remoteCharactersDataSource.getCharacters()
-                localCharactersDataSource.insertCharacters(result?.results)
+                localCharactersDataSource.insertCharacters(result.results)
                 emit(Result.success(result))
             } catch (ex: Exception) {
                 val error = getError(ex)
@@ -35,21 +34,22 @@ class CharactersRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun observeCharacters(): Flow<List<Character>> {
+    override fun observeCharacters(): Flow<List<Character>> {
         return localCharactersDataSource.observeCharacters()
     }
 
-    override suspend fun refreshCharacters(): Result<Success> {
+    override suspend fun refreshCharacters(): Result<Unit> {
         return try {
-            val result = remoteCharactersDataSource.getCharacters()
-            localCharactersDataSource.insertCharacters(result?.results)
-            Result.success(Success(true))
+            remoteCharactersDataSource.getCharacters().also {
+                localCharactersDataSource.insertCharacters(it.results)
+            }
+            Result.success(Unit)
         } catch (ex: Exception) {
             Result.failure(getError(ex))
         }
     }
 
-    override suspend fun getCharacterInfo(characterId: Int): Flow<Result<Character?>> {
+    override suspend fun getCharacterInfo(characterId: Int): Flow<Result<Character>> {
         return flow {
             try {
                 emit(Result.success(remoteCharactersDataSource.getCharacterInfo(characterId)))

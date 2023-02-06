@@ -8,15 +8,15 @@ import androidx.room.PrimaryKey
 data class CharacterOriginRoom(
     @ColumnInfo(name = "character_origin_name")
     @PrimaryKey
-    var name: String = "",
+    val name: String = "",
 
     @ColumnInfo(name = "character_origin_url")
-    var url: String? = null
+    val url: String = ""
 )
 
 data class CharacterOrigin(
-    var name: String = "",
-    var url: String? = null
+    val name: String = "",
+    val url: String = ""
 )
 
 fun CharacterOriginRoom.toCharacterOrigin(): CharacterOrigin {

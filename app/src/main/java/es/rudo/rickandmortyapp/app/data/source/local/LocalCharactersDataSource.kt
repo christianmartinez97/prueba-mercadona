@@ -4,8 +4,8 @@ import es.rudo.rickandmortyapp.app.data.models.Character
 import kotlinx.coroutines.flow.Flow
 
 interface LocalCharactersDataSource {
-    fun getCharacters(): List<Character>
+    suspend fun getCharacters(): List<Character>
     fun observeCharacters(): Flow<List<Character>>
-    fun getCharacterInfo(characterId: Int): Character
-    fun insertCharacters(charactersList: List<Character>?)
+    suspend fun getCharacterInfo(characterId: Int): Character
+    suspend fun insertCharacters(charactersList: List<Character>)
 }

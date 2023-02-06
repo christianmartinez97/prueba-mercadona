@@ -9,16 +9,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CharacterDao {
-
-    @Query("SELECT * FROM CharacterRoom")
+    @Query("SELECT * FROM Characters")
     fun getAllCharacters(): List<CharacterRoom>
 
-    @Query("SELECT * FROM CharacterRoom")
+    @Query("SELECT * FROM Characters")
     fun observeCharacters(): Flow<List<CharacterRoom>>
 
-    @Query("SELECT * FROM CharacterRoom WHERE id = :characterId")
+    @Query("SELECT * FROM Characters WHERE id = :characterId")
     fun getCharacterById(characterId: Int): CharacterRoom
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacters(charactersList: List<CharacterRoom>?)
+    fun insertCharacters(charactersList: List<CharacterRoom>)
 }

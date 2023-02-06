@@ -11,12 +11,12 @@ data class CharacterLocationRoom(
     var name: String = "",
 
     @ColumnInfo(name = "character_location_url")
-    var url: String? = null
+    var url: String = ""
 )
 
 data class CharacterLocation(
-    var name: String = "",
-    var url: String? = null
+    val name: String = "",
+    val url: String = ""
 )
 
 fun CharacterLocationRoom.toCharacterLocation(): CharacterLocation {

@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ObserveCharactersUseCase @Inject constructor(
     private val charactersRepository: CharactersRepository
 ) {
-    suspend operator fun invoke(): Flow<List<Character>> {
+    operator fun invoke(): Flow<List<Character>> {
         return charactersRepository.observeCharacters()
     }
 }

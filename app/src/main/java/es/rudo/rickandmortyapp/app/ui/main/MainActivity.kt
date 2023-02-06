@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import es.rudo.rickandmortyapp.app.R
 import es.rudo.rickandmortyapp.app.data.models.Empty
 import es.rudo.rickandmortyapp.app.data.models.Error
-import es.rudo.rickandmortyapp.app.data.models.Success
 import es.rudo.rickandmortyapp.app.databinding.ActivityMainBinding
 import es.rudo.rickandmortyapp.app.helpers.Constants.BUNDLE_CHARACTER_ID
 import es.rudo.rickandmortyapp.app.ui.character_detail.CharacterDetailActivity
@@ -31,10 +30,9 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         setupToolbar()
+        setupAdapter()
         initListeners()
         initObservers()
-        setupAdapter()
-        viewModel.observeCharacters()
         viewModel.refreshCharacters()
     }
 
@@ -61,13 +59,6 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             viewModel.mainUiState
-                .map { it.success }
-                .collect {
-                    manageSuccess(it)
-                }
-        }
-        lifecycleScope.launch {
-            viewModel.mainUiState
                 .map { it.error }
                 .collect {
                     manageError(it)
@@ -87,11 +78,5 @@ class MainActivity : AppCompatActivity() {
     private fun manageError(error: Error) {
         if (error is Empty) return
         Toast.makeText(this, "$error - ${error.description}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun manageSuccess(success: Success) {
-        if (success.isSuccess) {
-            Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
-        }
     }
 }

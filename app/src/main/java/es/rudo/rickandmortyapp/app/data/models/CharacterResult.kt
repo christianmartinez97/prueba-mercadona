@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class CharacterResult(
 
     @SerializedName("info")
-    var characterPager: CharacterPager? = null,
+    val characterPager: CharacterPager = CharacterPager(),
 
-    var results: List<Character>? = null
+    val results: List<Character> = listOf()
 )
