@@ -20,6 +20,5 @@ interface CharacterDao {
     fun getCharacterById(characterId: Int): CharacterRoom
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    @JvmSuppressWildcards
     fun insertCharacters(charactersList: List<CharacterRoom>?)
 }
