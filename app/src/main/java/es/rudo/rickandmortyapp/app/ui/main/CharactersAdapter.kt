@@ -1,7 +1,6 @@
 package es.rudo.rickandmortyapp.app.ui.main
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,11 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.GenericTransitionOptions
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import es.rudo.rickandmortyapp.app.R
 import es.rudo.rickandmortyapp.app.data.models.Character
 import es.rudo.rickandmortyapp.app.databinding.ItemCharacterBinding
@@ -71,27 +66,6 @@ class CharactersAdapter(
 
             Glide.with(binding.root.context).load(item.image)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .addListener(object: RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false
-                    }
-
-                })
                 .transition(GenericTransitionOptions.with(com.bumptech.glide.R.anim.abc_fade_in))
                 .into(binding.imageCharacter)
 

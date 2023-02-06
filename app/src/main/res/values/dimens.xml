@@ -2,6 +2,7 @@
     <dimen name="extra_small_margin">10dp</dimen>
     <dimen name="small_margin">12dp</dimen>
     <dimen name="margin_regular">16dp</dimen>
+    <dimen name="margin_big">20dp</dimen>
     <dimen name="text_big_size">20sp</dimen>
     <dimen name="text_extra_big_size">24sp</dimen>
     <dimen name="card_elevation">5dp</dimen>
