@@ -3,6 +3,7 @@ package es.rudo.rickandmortyapp.app.data.repository
 import es.rudo.rickandmortyapp.app.data.models.Character
 import es.rudo.rickandmortyapp.app.data.models.CharacterResult
 import es.rudo.rickandmortyapp.app.data.models.Error
+import es.rudo.rickandmortyapp.app.data.models.Success
 import es.rudo.rickandmortyapp.app.data.source.RemoteCharactersDataSource
 import es.rudo.rickandmortyapp.app.data.source.local.LocalCharactersDataSource
 import es.rudo.rickandmortyapp.app.domain.repository.CharactersRepository
@@ -31,6 +32,20 @@ class CharactersRepositoryImpl @Inject constructor(
                     emit(Result.failure(error))
                 }
             }
+        }
+    }
+
+    override suspend fun observeCharacters(): Flow<List<Character>> {
+        return localCharactersDataSource.observeCharacters()
+    }
+
+    override suspend fun refreshCharacters(): Result<Success> {
+        return try {
+            val result = remoteCharactersDataSource.getCharacters()
+            localCharactersDataSource.insertCharacters(result?.results)
+            Result.success(Success(true))
+        } catch (ex: Exception) {
+            Result.failure(getError(ex))
         }
     }
 

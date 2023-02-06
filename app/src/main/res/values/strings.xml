@@ -7,4 +7,6 @@
     <string name="character_specie">Specie: %s</string>
     <string name="character_gender">Gender: %s</string>
     <string name="character_location">Location: %s</string>
+    <string name="refresh">Refresh</string>
+    <string name="success">Characters obtained successfully</string>
 </resources>

@@ -10,6 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import es.rudo.rickandmortyapp.app.R
 import es.rudo.rickandmortyapp.app.data.models.Empty
+import es.rudo.rickandmortyapp.app.data.models.Error
+import es.rudo.rickandmortyapp.app.data.models.Success
 import es.rudo.rickandmortyapp.app.databinding.ActivityMainBinding
 import es.rudo.rickandmortyapp.app.helpers.Constants.BUNDLE_CHARACTER_ID
 import es.rudo.rickandmortyapp.app.ui.character_detail.CharacterDetailActivity
@@ -29,14 +31,22 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         setupToolbar()
+        initListeners()
         initObservers()
         setupAdapter()
-        viewModel.getAllCharacters()
+        viewModel.observeCharacters()
+        viewModel.refreshCharacters()
     }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
+    }
+
+    private fun initListeners() {
+        binding.buttonRefresh.setOnClickListener {
+            viewModel.refreshCharacters()
+        }
     }
 
     private fun initObservers() {
@@ -47,6 +57,13 @@ class MainActivity : AppCompatActivity() {
                     if (it.isNotEmpty()) {
                         adapter.submitList(it.toMutableList())
                     }
+                }
+        }
+        lifecycleScope.launch {
+            viewModel.mainUiState
+                .map { it.success }
+                .collect {
+                    manageSuccess(it)
                 }
         }
         lifecycleScope.launch {
@@ -67,8 +84,14 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerCharacters.adapter = adapter
     }
 
-    private fun manageError(ex: Exception) {
-        if (ex is Empty) return
-        Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show()
+    private fun manageError(error: Error) {
+        if (error is Empty) return
+        Toast.makeText(this, "$error - ${error.description}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun manageSuccess(success: Success) {
+        if (success.isSuccess) {
+            Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
+        }
     }
 }
