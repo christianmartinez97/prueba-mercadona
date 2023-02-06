@@ -1,7 +1,6 @@
 package es.rudo.rickandmortyapp.app.ui.character_detail
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,8 +12,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import dagger.hilt.android.AndroidEntryPoint
 import es.rudo.rickandmortyapp.app.R
 import es.rudo.rickandmortyapp.app.data.models.Character
-import es.rudo.rickandmortyapp.app.data.models.Empty
-import es.rudo.rickandmortyapp.app.data.models.Error
 import es.rudo.rickandmortyapp.app.databinding.ActivityCharacterDetailBinding
 import es.rudo.rickandmortyapp.app.helpers.Constants.BUNDLE_CHARACTER_ID
 import es.rudo.rickandmortyapp.app.helpers.Constants.CHARACTER_UNKNOWN
@@ -44,14 +41,6 @@ class CharacterDetailActivity : AppCompatActivity() {
                 .map { it.character }
                 .collect {
                     setViewInfo(it)
-                }
-        }
-
-        lifecycleScope.launch {
-            viewModel.characterDetailUIState
-                .map { it.error }
-                .collect {
-                    showError(it)
                 }
         }
     }
@@ -125,11 +114,6 @@ class CharacterDetailActivity : AppCompatActivity() {
                 binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
                 getString(R.string.character_location, CHARACTER_UNKNOWN)
             }
-    }
-
-    private fun showError(error: Error) {
-        if (error is Empty) return
-        Toast.makeText(this, error.description.toString(), Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

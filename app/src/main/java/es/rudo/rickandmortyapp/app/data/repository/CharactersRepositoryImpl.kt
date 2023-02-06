@@ -49,13 +49,7 @@ class CharactersRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getCharacterInfo(characterId: Int): Flow<Result<Character>> {
-        return flow {
-            try {
-                emit(Result.success(localCharactersDataSource.getCharacterInfo(characterId)))
-            } catch (ex: Exception) {
-                emit(Result.failure(getError(ex)))
-            }
-        }
+    override suspend fun getCharacterInfo(characterId: Int): Character {
+        return localCharactersDataSource.getCharacterInfo(characterId)
     }
 }

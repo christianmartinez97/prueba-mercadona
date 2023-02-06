@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import es.rudo.rickandmortyapp.app.data.models.Character
-import es.rudo.rickandmortyapp.app.data.models.Empty
-import es.rudo.rickandmortyapp.app.data.models.Error
 import es.rudo.rickandmortyapp.app.domain.usecases.GetCharacterInfoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +13,7 @@ import javax.inject.Inject
 
 data class CharacterDetailUIState(
     val characterId: Int = -1,
-    val character: Character = Character(),
-    val error: Error = Empty
+    val character: Character = Character()
 )
 
 @HiltViewModel
@@ -30,16 +27,7 @@ class CharacterDetailViewModel @Inject constructor(
 
     fun getCharacterInfo() {
         viewModelScope.launch(Dispatchers.IO) {
-            getCharacterInfoUseCase(characterDetailUIState.value.characterId).collect { response ->
-                response.onSuccess { character ->
-                    character?.let {
-                        setCharacter(it)
-                    }
-                }
-                response.onFailure {
-                    setError(it as Error)
-                }
-            }
+            setCharacter(getCharacterInfoUseCase(characterDetailUIState.value.characterId))
         }
     }
 
@@ -52,12 +40,6 @@ class CharacterDetailViewModel @Inject constructor(
     fun setCharacterId(characterId: Int) {
         characterDetailUIState.update {
             it.copy(characterId = characterId)
-        }
-    }
-
-    private fun setError(error: Error) {
-        characterDetailUIState.update {
-            it.copy(error = error)
         }
     }
 }
