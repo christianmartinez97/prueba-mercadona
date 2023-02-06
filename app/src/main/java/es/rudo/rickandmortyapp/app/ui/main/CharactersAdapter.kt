@@ -39,23 +39,14 @@ class CharactersAdapter(
                 onCharacterClicked(item)
             }
 
-            item.name?.let { name ->
+            item.name.let { name ->
                 binding.textCharacterName.text =
                     binding.mainLayout.context.getString(R.string.character_name, name)
-            } ?: kotlin.run {
-                binding.textCharacterName.text =
-                    binding.mainLayout.context.getString(R.string.character_name, CHARACTER_UNKNOWN)
             }
 
-            item.characterOrigin?.name?.let { origin ->
+            item.characterOrigin.name.let { origin ->
                 binding.textCharacterOrigin.text =
                     binding.mainLayout.context.getString(R.string.character_origin, origin)
-            } ?: kotlin.run {
-                binding.textCharacterOrigin.text =
-                    binding.mainLayout.context.getString(
-                        R.string.character_origin,
-                        CHARACTER_UNKNOWN
-                    )
             }
 
             Utils.setCharacterStatus(

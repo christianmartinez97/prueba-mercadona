@@ -82,37 +82,25 @@ class CharacterDetailActivity : AppCompatActivity() {
             binding.textStatusDescription
         )
 
-        binding.textSpecie.text = characterRoom.species?.let {
+        binding.textSpecie.text = characterRoom.species.let {
             binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.black))
             getString(R.string.character_specie, it)
-        } ?: kotlin.run {
-            binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
-            getString(R.string.character_specie, CHARACTER_UNKNOWN)
         }
 
-        binding.textGender.text = characterRoom.gender?.let {
+        binding.textGender.text = characterRoom.gender.let {
             binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.black))
             getString(R.string.character_gender, it)
-        } ?: kotlin.run {
-            binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
-            getString(R.string.character_gender, CHARACTER_UNKNOWN)
         }
 
-        binding.textOrigin.text = characterRoom.characterOrigin?.name?.let {
+        binding.textOrigin.text = characterRoom.characterOrigin.name.let {
             binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.black))
             getString(R.string.character_origin, it)
-        } ?: kotlin.run {
-            binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
-            getString(R.string.character_origin, CHARACTER_UNKNOWN)
         }
 
         binding.textLocation.text =
-            characterRoom.characterLocation?.name?.let {
+            characterRoom.characterLocation.name.let {
                 binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.black))
                 getString(R.string.character_location, it)
-            } ?: kotlin.run {
-                binding.textSpecie.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
-                getString(R.string.character_location, CHARACTER_UNKNOWN)
             }
     }
 
