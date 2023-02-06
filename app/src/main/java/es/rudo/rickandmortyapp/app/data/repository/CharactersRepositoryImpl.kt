@@ -16,7 +16,7 @@ class CharactersRepositoryImpl @Inject constructor(
     private val localCharactersDataSource: LocalCharactersDataSource
 ) : CharactersRepository {
 
-    override suspend fun getCharacters(): Flow<Result<CharacterResult>> {
+    override fun getCharacters(): Flow<Result<CharacterResult>> {
         return flow {
             try {
                 val result = remoteCharactersDataSource.getCharacters()
@@ -49,17 +49,12 @@ class CharactersRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCharacterInfo(characterId: Int): Flow<Result<Character>> {
+    override fun getCharacterInfo(characterId: Int): Flow<Result<Character>> {
         return flow {
             try {
-                emit(Result.success(remoteCharactersDataSource.getCharacterInfo(characterId)))
+                emit(Result.success(localCharactersDataSource.getCharacterInfo(characterId)))
             } catch (ex: Exception) {
-                val error = getError(ex)
-                if (error is Error.NetworkException) {
-                    emit(Result.success(localCharactersDataSource.getCharacterInfo(characterId)))
-                } else {
-                    emit(Result.failure(error))
-                }
+                emit(Result.failure(getError(ex)))
             }
         }
     }

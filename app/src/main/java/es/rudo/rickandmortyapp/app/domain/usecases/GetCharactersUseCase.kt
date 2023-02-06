@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetCharactersUseCase @Inject constructor(
     private val charactersRepository: CharactersRepository
 ) {
-    suspend operator fun invoke(): Flow<Result<CharacterResult?>> {
+    operator fun invoke(): Flow<Result<CharacterResult?>> {
         return charactersRepository.getCharacters()
     }
 }
