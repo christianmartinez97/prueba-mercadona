@@ -33,15 +33,19 @@ class MainViewModel @Inject constructor(
             getCharactersUseCase().collect { result ->
                 result.onSuccess { characterResult ->
                     characterResult?.results?.let { characters ->
-                        (mainUiState.value.charactersList as MutableList<Character>).addAll(
-                            characters
-                        )
+                        setCharactersList(characters)
                     }
                 }
                 result.onFailure {
                     setError(it as Error)
                 }
             }
+        }
+    }
+
+    private fun setCharactersList(charactersList: List<Character>) {
+        mainUiState.update {
+            it.copy(charactersList = charactersList)
         }
     }
 
